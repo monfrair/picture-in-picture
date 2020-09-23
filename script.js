@@ -5,11 +5,24 @@ const button = document.getElementById('button');
 
 async function selectMediaStream() {
 	try {
-		something;
+		const mediaStream = await navigator.mediaDevices.getDisplayMedia();
+		videoElement.srcObject = mediaStream;
+		videoElement.onloadedmetadata = () => {
+			videoElement.play();
+		};
 	} catch (error) {
 		// catch any errors here
-		console.log('whoops, error here:', error);
+		console.log(error);
 	}
 }
+button.addEventListener('click', async () => {
+	// disable button
+	button.disabled = true;
+	// start PIP
+	await videoElement.requestPictureInPicture();
+	// reset button
+	button.disabled = false;
+});
+
 // On load
 selectMediaStream();
